@@ -1,0 +1,44 @@
+****************************git et github****************
+*****config 
+git config --global user.name "John Doe" 
+git config --global user.email johndoe@example.com
+****les branches :
+*git branch : vous affiche les differentes branches existantes
+*git branch cagnotte : créee une branche qui s'appelle cagnotte
+*git checkout cagnotte : permet de se déplacer vers la branche cagnotte
+*touch cagnotte.txt : crée un fichier texte dans la branche courant
+*git add cagnotte.txt : indexer le fichier en qst
+*git commit -m "commentaire" : valider les modifications apporter à la branche courante
+*git push -u origin cagnotte : envoyer les modifications apporter à la branche courante à la branche distante
+*git merge cagnotte : fusionner la branche cagnotte avec la brache courante
+*git remote add OC https://github.com/nom-dutilisateur/monDossier : lie votre depot local avec le depot distant en qst, "OC" est nom court pour appeller le depot distant
+*git pull OC main : dupliquer le depot distant OC ds la branche main
+*git clone https://github.com/nom-dutilisateur/monDossier : dupliquer le depot distant en local
+*git branch -d brancheTest : supprime la branche en qst
+*git branch -D brancheTest : supprime la branche en qst et les modifications faites
+*git branch -M main : changer le nom de la branche principale au nom main
+*git stash : réalise une remise qui permet de mettre de cote les modifications faites à une branche au but de les rutiliser plus tard
+*git stash list : permet d'afficher l'ensemble des remises
+*git stash apply nomDeRemise : appliquer la remise à la branche courante
+*************************erreurs******************
+******commit sur la mauvaise branche**
+*git log : afficher l'ensemble des commits faites par ordre chronologique
+*git reset --hard HEAD^ : supprime le dernier commit de la branche courannte
+*git reset --hard hashCommit : appliquer le commit en qst, qui était supprimé à la branch courante
+***********message de commit erroné**
+*git commit --amend -m "le massage voulu" : permet de changer le message du dernier commit
+**************oublier un fichier ds mon dernier commit**
+*git add monFichierOublié
+*git commit amend --no-edit : ajouter le fichier indexé à le dernier commit
+******************commandes utiles*********
+*git reset HEAD : permet d'annuler des changements non commités.
+*git reset notreCommitCible --hard : Cette commande permet de revenir à n'importe quel commit mais en oubliant absolument tout ce qu'il s'est passé après
+*git reset --mixed : permet de revenir juste après votre dernier commit ou le commit spécifié, sans supprimer vos modifications en cours.
+*git reset --soft  : Cette commande permet de se placer sur un commit spécifique afin de voir le code à un instant donné.
+*git revert HEAD^ : permet de revenir à l'état précédent, tout en faisant un deuxième commit.
+*git reflog : git reflog  va loguer les commits ainsi que toutes les autres actions que vous avez pu faire en local : vos modifications de messages, vos merges, vos resets, enfin tout
+*git blame : permet d’examiner le contenu d’un fichier ligne par ligne et de déterminer la date à laquelle chaque ligne a été modifiée, et le nom de l’auteur des modifications
+*git cherry-pick sha sha... : permettre de sélectionner un ou plusieurs commits grâce à leur SHA et de les migrer sur la branche master, sans pour autant fusionner toute la branche.
+**************************difference between fork and clone*****************************
+*fork : creates a completely independent copy of Git repository. 
+*git clone : creates a linked copy that will continue to synchronize with the target repository.
