@@ -40,5 +40,6 @@ git config --global user.email johndoe@example.com
 *git blame : permet d’examiner le contenu d’un fichier ligne par ligne et de déterminer la date à laquelle chaque ligne a été modifiée, et le nom de l’auteur des modifications
 *git cherry-pick sha sha... : permettre de sélectionner un ou plusieurs commits grâce à leur SHA et de les migrer sur la branche master, sans pour autant fusionner toute la branche.
 **************************difference between fork and clone*****************************
-*fork : creates a completely independent copy of Git repository. 
+*fork : crts a completely independent copy of Git repository.
 *git clone : creates a linked copy that will continue to synchronize with the target repository.
+***********************************
