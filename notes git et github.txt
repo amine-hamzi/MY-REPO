@@ -32,6 +32,7 @@ git config --global user.email johndoe@example.com
 *git commit amend --no-edit : ajouter le fichier indexé à le dernier commit
 ******************commandes utiles*********
 *git reset HEAD : permet d'annuler des changements non commités.
+*git rebase HEAD~3 : combine the last three commits into one by picking the first commit and squashing the others.
 *git reset notreCommitCible --hard : Cette commande permet de revenir à n'importe quel commit mais en oubliant absolument tout ce qu'il s'est passé après
 *git reset --mixed : permet de revenir juste après votre dernier commit ou le commit spécifié, sans supprimer vos modifications en cours.
 *git reset --soft  : Cette commande permet de se placer sur un commit spécifique afin de voir le code à un instant donné.
