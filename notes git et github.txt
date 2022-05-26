@@ -45,3 +45,4 @@ git config --global user.email johndoe@example.com
 *git clone : creates a linked copy that will continue to synchronize with the target repository.
 ***********************************
 git rebase -i : merge a bunch of commit into one, by picking the first commit and squashing the others.
+git lfs track nomdufichier : permet de stocker les fichiers de grand taille.
