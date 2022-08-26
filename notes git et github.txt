@@ -46,3 +46,10 @@ git config --global user.email johndoe@example.com
 ***********************************
 git rebase -i : merge a bunch of commit into one, by picking the first commit and squashing the others.
 git lfs track nomdufichier : permet de stocker les fichiers de grand taille.
+*git diff-tree hachage du commit : afficher la liste modifiés ou ajoutés dans un commit.
+*git show <commit> --stat : histogramme  montrant les insertions et les suppressions par fichier pour un commit.
+*git diff --cached : review staged changes
+*git tag
+*git stash pop applies the topmost entry in the stash to the working files and removes it from the stash
+*git stash apply applies the topmost entry in the stash to the working files but leaves it in the stash.
+*git stash drop : supprime la derniere stash
