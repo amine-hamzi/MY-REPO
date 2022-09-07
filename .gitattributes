@@ -1,0 +1,1 @@
+SoapUI-x64-5.7.0.exe filter=lfs diff=lfs merge=lfs -text
