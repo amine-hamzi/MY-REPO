@@ -53,4 +53,6 @@ git lfs track nomdufichier : permet de stocker les fichiers de grand taille.
 *git stash pop applies the topmost entry in the stash to the working files and removes it from the stash
 *git stash apply applies the topmost entry in the stash to the working files but leaves it in the stash.
 *git stash drop : supprime la derniere stash
-https://we.tl/t-qzuHwBlpV9
+*git grep -Il "\r" : search file that contains crlf lines \r
+    -I : to ignore binary files
+    -l : to display only files with matches and not all matches
