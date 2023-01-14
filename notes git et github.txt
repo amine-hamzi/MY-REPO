@@ -56,3 +56,4 @@ git lfs track nomdufichier : permet de stocker les fichiers de grand taille.
 *git grep -Il "\r" : search file that contains crlf lines \r
     -I : to ignore binary files
     -l : to display only files with matches and not all matches
+    crlf : mean EOF(end of line)
