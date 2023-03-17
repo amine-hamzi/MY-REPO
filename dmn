@@ -1,0 +1,523 @@
+dmnKey : appName-nameField(enum.getName())
+dmnFileRef : key(enum.getKey())
+
+
+public <T> DmnDecision getDmnDecision(String dmnKey,String dmnFileRef, EntityId entity) {
+        String dmnFilePath = loadingDmnConfiguration.getDmnFilePath(loadingDmnConfiguration.getApplicationName(dmnKey),dmnFileRef, entity);
+        try {
+            InputStream dmn = resourceService.getResource(loadingDmnConfiguration.getResourceType(), dmnFilePath).getInputStream();
+            return dmnEngine.parseDecision(dmnFileRef, dmn);
+        } catch (ResourceNotFoundError e) {
+            log.error("file not found in this following location " + dmnFilePath);
+            return null;
+        } catch (IOException e) {
+            log.error("error while getting resource, file path  " + dmnFilePath, e);
+            return null;
+        }
+
+    }
+
+
+public boolean checkEligibilityForOperation(CustomerType customerType, String customerSegment, String accountClass, String accountProduct, DmnDecision decision, RequestContext context) {
+        boolean checkEligibility = false;
+        VariableMap inputParameters = Variables.createVariables()
+            .putValue(EligibilityConfig.CUSTOMER_TYPE_DMN_INPUT, customerType)
+            .putValue(EligibilityConfig.CUSTOMER_SEGMENT_DMN_INPUT, customerSegment)
+            .putValue(EligibilityConfig.ACCOUNT_CLASS_DMN_INPUT, accountClass)
+            .putValue(EligibilityConfig.PRODUCT_DMN_INPUT, accountProduct);
+        DmnDecisionResult result = dmnEngine.evaluateDecision(decision, inputParameters);
+        if (result.getSingleResult() != null && (boolean) result.getSingleResult().get(EligibilityConfig.IS_ACCOUNT_ELIGIBLE_DMN_OUTPUT)) {
+            checkEligibility = true;
+        }
+        return checkEligibility;
+    }
+	
+	
+	
+	api("org.camunda.bpm.dmn:camunda-engine-dmn:7.13.0")
+	
+	
+	
+	
+	public class EligibilityConfig {
+
+    @Value("${ unibank.services.eligibilities.entities.have.opposition.bug:MG}")
+    private String entityHaveOppositionBug;
+
+    public Boolean entityIsHaveOppositionBug(EntityId entityId) {
+       return  (new ArrayList<String>(Arrays.asList(entityHaveOppositionBug.split(",")))).contains(entityId.name());
+    }
+
+    public final static String CUSTOMER_TYPE_DMN_INPUT = "customerType";
+    public final static String CUSTOMER_SEGMENT_DMN_INPUT = "customerSegment";
+    public final static String ACCOUNT_CLASS_DMN_INPUT = "accountClass";
+    public final static String PRODUCT_DMN_INPUT = "productCode";
+    public final static String OPERATION_IDENTIFIER_DMN_INPUT = "OperationIdentifier";
+    public final static String OPPOSITION_CODE_DMN_INPUT = "OppositionCode";
+
+    public final static String IS_ACCOUNT_ELIGIBLE_DMN_OUTPUT = "isAccountEligible";
+    public final static String OPERATION_OPPOSED_DMN_OUTPUT = "OperationOpposed";
+
+
+
+
+}
+
+
+
+
+**********************************************************************dmn *******************************************************
+
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_0a8bziv" name="definitions" namespace="http://camunda.org/schema/1.0/dmn" exporter="dmn-js (https://demo.bpmn.io/dmn)" exporterVersion="13.0.0">
+  <decision id="B2BIN" name="">
+    <decisionTable id="decisionTable_0y5w7ir">
+      <input id="InputClause_0a1lpfi" label="customerType" camunda:inputVariable="customerType">
+        <inputExpression id="LiteralExpression_1pvxoay" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1hfwrwb" label="customerSegment" camunda:inputVariable="customerSegment">
+        <inputExpression id="LiteralExpression_1tnru73" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="input1" label="Chapitre comptable" camunda:inputVariable="accountClass">
+        <inputExpression id="inputExpression1" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0u0eyhx" label="Code produit" camunda:inputVariable="productCode">
+        <inputExpression id="LiteralExpression_1bs3ucd" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0itvg68" label="Compte créditable ?" name="isAccountEligible" typeRef="boolean" />
+      <rule id="DecisionRule_06nd1s9">
+        <inputEntry id="UnaryTests_0aq58np">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0onwdyw">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1wmkmv3">
+          <text>"372000"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1gv0g4a">
+          <text>"001"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0h1a7ct">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hb6f97">
+        <inputEntry id="UnaryTests_0kfa9tv">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01y9gt0">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ayzdw9">
+          <text>"372100"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1nebknx">
+          <text>"001"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1567qgn">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0dqg8dy">
+        <inputEntry id="UnaryTests_1wbel91">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0cd900z">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xgb8ic">
+          <text>"372120"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1cgmbkj">
+          <text>"001"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0baho17">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1rr0e3w">
+        <inputEntry id="UnaryTests_0mck4hy">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01juq9a">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0si1i1c">
+          <text>"372200"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06wq0oj">
+          <text>"001"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_07yil30">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_09lkg4b">
+        <inputEntry id="UnaryTests_1ulvnp8">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0jr0d7q">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_04fdb62">
+          <text>"372300"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1q7tapt">
+          <text>"001"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1tjiwov">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1h2jnk1">
+        <inputEntry id="UnaryTests_0oisljx">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18r0txb">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xkk2ey">
+          <text>"372000"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1vyrbfu">
+          <text>"002"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1omk7sy">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_13xlur0">
+        <inputEntry id="UnaryTests_1qsoosw">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1w18hnm">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_14hl844">
+          <text>"372100"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1o2vviw">
+          <text>"002"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1pi35qc">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_038ooop">
+        <inputEntry id="UnaryTests_0bvpw2f">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0pogywn">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xtpdq4">
+          <text>"372120"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0x8quxy">
+          <text>"002"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0nxxikc">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1qz8sev">
+        <inputEntry id="UnaryTests_0zblqvs">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1bjf13i">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0gqlmp6">
+          <text>"372200"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1mhmwe0">
+          <text>"002"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1yjqlzt">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0zowntt">
+        <inputEntry id="UnaryTests_0hg26uy">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1frt61h">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1tt2n9v">
+          <text>"372300"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1692zcd">
+          <text>"002"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1kgcg7y">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0s0hu1v">
+        <inputEntry id="UnaryTests_1jxscv2">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18ebpmv">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1pb3gjb">
+          <text>"372000"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qjf8hc">
+          <text>"005"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_11gmoyq">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1d16w32">
+        <inputEntry id="UnaryTests_13n2k4s">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_04po6cn">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1sssjgd">
+          <text>"372100"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ajb2yc">
+          <text>"005"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1eub4j2">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ai4xdg">
+        <inputEntry id="UnaryTests_1ihfrhu">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1eddaci">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0b47ntf">
+          <text>"372120"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_09h7mnh">
+          <text>"005"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1lhlqhf">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1fmgezh">
+        <inputEntry id="UnaryTests_0fu7sct">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ovh5jz">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zmt5uv">
+          <text>"372200"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kn90p4">
+          <text>"005"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1df95g6">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0n0tlog">
+        <inputEntry id="UnaryTests_0hb064i">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0k67ie1">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1a53gx0">
+          <text>"372300"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xmlc1m">
+          <text>"005"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gn9tkv">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0qy9hdo">
+        <inputEntry id="UnaryTests_1gcs30s">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0d8g3h4">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zldkxu">
+          <text>"372000"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0yzgbsk">
+          <text>"006"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1dlhi63">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_125e8ym">
+        <inputEntry id="UnaryTests_030beol">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06mdmxy">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0a22v03">
+          <text>"372100"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13oe5a0">
+          <text>"006"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ii6rr3">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1j4zk6z">
+        <inputEntry id="UnaryTests_1hy2wn2">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0yxkvn6">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1thnyip">
+          <text>"372120"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_161wbx5">
+          <text>"006"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1sr9efh">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hwggkx">
+        <inputEntry id="UnaryTests_0ekq0lx">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1l3kt06">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0myi4lv">
+          <text>"372200"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_084a723">
+          <text>"006"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0tcb4jv">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0esbvw3">
+        <inputEntry id="UnaryTests_0v2jlhu">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1g7ukhs">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_19p065k">
+          <text>"372300"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0lun9j7">
+          <text>"006"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_11vad5i">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_060bpyg">
+        <inputEntry id="UnaryTests_1642pgx">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0udgoma">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0cycbha">
+          <text>"372000"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0tjp5wa">
+          <text>"016"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0r76sc8">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0eg9j89">
+        <inputEntry id="UnaryTests_1ih18d1">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06m8501">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0k3ad3w">
+          <text>"372100"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0aon4tv">
+          <text>"016"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0e298kg">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0fjhbm2">
+        <inputEntry id="UnaryTests_1x26wly">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1hnqwe5">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0qp485s">
+          <text>"372120"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0cifkt9">
+          <text>"016"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08eygj1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1tg0zmu">
+        <inputEntry id="UnaryTests_0dsm68l">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0u8ypnn">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1n0pce4">
+          <text>"372200"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1phg1c3">
+          <text>"016"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1rat04f">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0bg3v5b">
+        <inputEntry id="UnaryTests_1kxutpy">
+          <text>"RETAIL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ffcz0w">
+          <text>"ALL"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xvjuk4">
+          <text>"372300"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0rl33px">
+          <text>"016"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_023kkoh">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
