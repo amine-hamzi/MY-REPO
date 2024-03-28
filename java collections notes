@@ -1,0 +1,159 @@
+******les collections en java :
+
+ 
+
+***************************************************************************************************************************
+
+ 
+
+****List :
+
+*it is implemented by the classes ArrayList, LinkedList, Vector, and Stack.
+
+*allow duplicate values.
+
+*allow null values.
+
+*it maintains the insertion order.
+
+ 
+
+***The ArrayList :
+
+*fast reading
+
+*non synchronized -> solution is to use Collections.synchronizedList(new ArrayList(...));
+
+ 
+
+***LinkedList :
+
+*the manipulation is fast because no shifting is required.
+
+*non synchronized
+
+*doubly linked list
+
+ 
+
+ 
+
+***Vector :
+
+*similar to ArrayList except synchronization
+
+*synchronized
+
+ 
+
+***stack :
+
+*The stack is the subclass of Vector.
+
+*It implements the LIFO data structure
+
+ 
+
+***************************************************************************************************************************
+
+ 
+
+****Queue :
+
+*it doesn't allow null values
+
+*it is implemented by PriorityQueue, Deque, and ArrayDeque
+
+*works as FIFO but after ordering the elements on natural ordering or by comparator
+
+ 
+
+***PriorityQueue :
+
+*it doesn't maintains the insertion order
+
+*it orders elements in natural ordering or based on a comparator
+
+ 
+
+***BlockingPriorityQueue :
+
+*similar to PriorityQueue but for thread safe utility
+
+ 
+
+****Deque :
+
+*permits to access the elements at both ends of the deque
+
+*Deque can be used as LIFO stack or FIFO queue
+
+*it is implemented by ArrayDeque
+
+ 
+
+***************************************************************************************************************************
+
+ 
+
+***Set :
+
+*no duplicate values
+
+*one null element
+
+ 
+
+**hashset :
+
+*doesn't maitain order over time
+
+ 
+
+**LinkedHashset :
+
+*maintains insertion order
+
+ 
+
+ 
+
+*********************************************************************************************************************************
+
+***Map :
+
+ 
+
+**HashMap :
+
+*doesn't keeps the insertion order
+
+*permits null values and null keys
+
+ 
+
+**LinkedHashMap :
+
+*keeps the insertion order
+
+=========================================================
+
+Ce message et toutes les pieces jointes (ci-apres le "message")
+sont confidentiels et susceptibles de contenir des informations
+couvertes par le secret professionnel. Ce message est etabli
+a l'intention exclusive de ses destinataires. Toute utilisation
+ou diffusion non autorisee interdite.
+Tout message electronique est susceptible d'alteration. La SOCIETE GENERALE
+et ses filiales declinent toute responsabilite au titre de ce message
+s'il a ete altere, deforme falsifie.
+
+=========================================================
+
+This message and any attachments (the "message") are confidential,
+intended solely for the addresses, and may contain legally privileged
+information. Any unauthorized use or dissemination is prohibited.
+E-mails are susceptible to alteration. Neither SOCIETE GENERALE nor any
+of its subsidiaries or affiliates shall be liable for the message
+if altered, changed or falsified.
+
+=========================================================
